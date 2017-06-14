@@ -11,21 +11,6 @@ import UIKit
 /// A cell capable of updating its colors in response to theme changes.
 final class ColorUpdatableTableViewCell: UITableViewCell {
     
-    // MARK: - Nested Types
-    
-    /// The view model enabling the cell to configure its views.
-    struct ViewModel {
-        
-        /// The theme for which to dictate the cell's appearance.
-        let theme: Theme
-        
-        /// The title text to display prominently.
-        let title: String
-        
-        /// The subtitle text to display alongside the title text.
-        let subtitle: String
-    }
-    
     // MARK: - Properties
     
     /// The view model enabling the cell to configure its views.
@@ -62,6 +47,24 @@ final class ColorUpdatableTableViewCell: UITableViewCell {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         
         commonInitialization()
+    }
+}
+
+// MARK: - Nested Types
+
+extension ColorUpdatableTableViewCell {
+    
+    /// The view model enabling the cell to configure its views.
+    struct ViewModel {
+        
+        /// The theme for which to dictate the cell's appearance.
+        let theme: Theme
+        
+        /// The title text to display prominently.
+        let title: String
+        
+        /// The subtitle text to display alongside the title text.
+        let subtitle: String
     }
 }
 

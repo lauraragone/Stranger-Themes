@@ -9,17 +9,7 @@
 import UIKit
 
 /// A rudiemtary table view data source displaying one section containing a fixed number of cells.
-final class CollectionViewDataSource: NSObject, UICollectionViewDataSource {
-    
-    // MARK: - Nested Types
-    
-    /// A closure for cell creation and configuration.
-    ///
-    /// - Parameters:
-    ///   - collectionView: The collection view containing the cell to configure.
-    ///   - indexPath: The index path of the cell to configure.
-    /// - Returns: A fully configured collection view cell.
-    typealias CellConfiguration = (_ collectionView: UICollectionView, _ indexPath: IndexPath, _ theme: Theme) -> UICollectionViewCell
+final class CollectionViewDataSource: NSObject {
     
     // MARK: - Properties
     
@@ -27,7 +17,7 @@ final class CollectionViewDataSource: NSObject, UICollectionViewDataSource {
     fileprivate let cellConfiguration: CellConfiguration
     
     /// The theme for which to configure cell colors.
-    private let theme: Theme
+    fileprivate let theme: Theme
     
     /// An initializer for the data source that takes a cell configuration and a theme.
     ///
@@ -38,18 +28,34 @@ final class CollectionViewDataSource: NSObject, UICollectionViewDataSource {
         self.cellConfiguration = cellConfiguration
         self.theme = theme
     }
-    
-    // MARK: - UICollectionViewDataSource
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension CollectionViewDataSource: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return cellConfiguration(collectionView, indexPath, theme)
     }
+}
+
+// MARK: - Nested Types
+
+extension CollectionViewDataSource {
+    
+    /// A closure for cell creation and configuration.
+    ///
+    /// - Parameters:
+    ///   - collectionView: The collection view containing the cell to configure.
+    ///   - indexPath: The index path of the cell to configure.
+    /// - Returns: A fully configured collection view cell.
+    typealias CellConfiguration = (_ collectionView: UICollectionView, _ indexPath: IndexPath, _ theme: Theme) -> UICollectionViewCell
 }

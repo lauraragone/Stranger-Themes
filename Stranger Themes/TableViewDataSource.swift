@@ -9,17 +9,7 @@
 import UIKit
 
 /// A rudiemtary table view data source displaying one section containing a fixed number of cells.
-final class TableViewDataSource: NSObject, UITableViewDataSource {
-    
-    // MARK: - Nested Types
-    
-    /// A closure for cell creation and configuration.
-    ///
-    /// - Parameters:
-    ///   - tableView: The table view containing the cell to configure.
-    ///   - indexPath: The index path of the cell to configure.
-    /// - Returns: A fully configured table view cell.
-    typealias CellConfiguration = (_ tableView: UITableView, _ indexPath: IndexPath, _ theme: Theme) -> UITableViewCell
+final class TableViewDataSource: NSObject {
     
     // MARK: - Properties
     
@@ -27,7 +17,7 @@ final class TableViewDataSource: NSObject, UITableViewDataSource {
     fileprivate let cellConfiguration: CellConfiguration
     
     /// The theme for which to configure cell colors.
-    private let theme: Theme
+    fileprivate let theme: Theme
     
     /// An initializer for the data source that takes a cell configuration and a theme.
     ///
@@ -38,8 +28,11 @@ final class TableViewDataSource: NSObject, UITableViewDataSource {
         self.cellConfiguration = cellConfiguration
         self.theme = theme
     }
-    
-    // MARK: - UITableViewDataSource
+}
+
+// MARK: - UITableViewDataSource
+
+extension TableViewDataSource: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -52,4 +45,17 @@ final class TableViewDataSource: NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return cellConfiguration(tableView, indexPath, theme)
     }
+}
+
+// MARK: - Nested Types
+
+extension TableViewDataSource {
+    
+    /// A closure for cell creation and configuration.
+    ///
+    /// - Parameters:
+    ///   - tableView: The table view containing the cell to configure.
+    ///   - indexPath: The index path of the cell to configure.
+    /// - Returns: A fully configured table view cell.
+    typealias CellConfiguration = (_ tableView: UITableView, _ indexPath: IndexPath, _ theme: Theme) -> UITableViewCell
 }

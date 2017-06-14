@@ -13,19 +13,17 @@ final class CollectionViewCellCreator {
     
     // MARK: - Properties
     
-    /// A struct defining cell reuse identifying strings.
-    fileprivate struct ReuseIdentifier {
-        
-        /// The reuse identifier corresponding to a color updatable cell.
-        static let colorUpdatableCell = "colorUpdatableCellReuseIdentifier"
-    }
+    fileprivate weak var delegate: CollectionViewCellActionDelegate?
     
     // MARK: - Initializers
     
-    /// Sets up the initial cell configuration necessary on the table view. Registers the appropriate cell types.
+    /// Sets up the initial cell configuration necessary on the collection view. Registers the appropriate cell types.
     ///
-    /// - Parameter tableView: The table view upon which to register the cell types.
-    init(collectionView: UICollectionView) {
+    /// - Parameters:
+    ///   - collectionView: The collection view upon which to register the cell types.
+    ///   - collectionViewCellActionDelegate: An optional delegate to handle taps to cells created by this cell creator.
+    init(collectionView: UICollectionView?, collectionViewCellActionDelegate: CollectionViewCellActionDelegate?) {
+        self.delegate = collectionViewCellActionDelegate
         registerCellTypes(for: collectionView)
     }
 }
@@ -45,25 +43,9 @@ extension CollectionViewCellCreator {
         return {
             switch (indexPath.section, indexPath.row) {
             case (0, 0):
-                return elevenCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
+                return lightCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
             case (0, 1):
-                return willCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 2):
-                return mikeCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 3):
-                return dustinCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 4):
-                return lucasCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 5):
-                return hopperCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 6):
-                return joyceCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 7):
-                return johnathanCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 8):
-                return nancyCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
-            case (0, 9):
-                return demigorgenCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
+                return darkCell(collectionView: collectionView, indexPath: indexPath, theme: theme)
             default:
                 assertionFailure("Please configure the data source to support the display cells at this index path.")
                 return nil
@@ -72,15 +54,27 @@ extension CollectionViewCellCreator {
     }
 }
 
+// MARK: - Nested Types
+
+private extension CollectionViewCellCreator {
+    
+    /// A struct defining cell reuse identifying strings.
+    struct ReuseIdentifier {
+        
+        /// The reuse identifier corresponding to a color updatable cell.
+        static let colorUpdatableCell = "colorUpdatableCellReuseIdentifier"
+    }
+}
+
 // MARK: Private
 
 private extension CollectionViewCellCreator {
     
-    func registerCellTypes(for collectionView: UICollectionView) {
-        collectionView.register(UINib(nibName: "ColorUpdatableCollectionViewCell", bundle: Bundle.main), forCellWithReuseIdentifier: ReuseIdentifier.colorUpdatableCell)
+    func registerCellTypes(for collectionView: UICollectionView?) {
+        collectionView?.register(UINib(nibName: "ColorUpdatableCollectionViewCell", bundle: Bundle.main), forCellWithReuseIdentifier: ReuseIdentifier.colorUpdatableCell)
     }
     
-    func elevenCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
+    func lightCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
             assertionFailure("Please make sure that the correct cell is registered in the table view.")
             return nil
@@ -88,132 +82,22 @@ private extension CollectionViewCellCreator {
         let image: UIImage = {
             switch theme {
             case .light:
-                return UIImage(named: "Eleven Light")!
+                return #imageLiteral(resourceName: "pink-bulb--lit")
             case .dark:
-                return UIImage(named: "Eleven Dark")!
+                return #imageLiteral(resourceName: "pink-bulb--off")
             }
         }()
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Eleven", image: image)
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
+        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, title: "Light", image: image)
+        
+        cell.tapHandler = { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.delegate?.collectionViewCellCreatorDidSelectLightMode(cellCreator: strongSelf)
         }
         
         return cell
     }
     
-    func willCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Will", image: UIImage(named: "Will")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
-        }
-        
-        return cell
-    }
-    
-    func mikeCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Mike", image: UIImage(named: "Mike")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
-        }
-        
-        return cell
-    }
-    
-    func dustinCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Dustin", image: UIImage(named: "Dustin")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
-        }
-        
-        return cell
-    }
-    
-    func lucasCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Lucas", image: UIImage(named: "Lucas")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
-        }
-        
-        return cell
-    }
-    
-    func hopperCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Hopper", image: UIImage(named: "Hopper")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
-        }
-        
-        return cell
-    }
-    
-    func joyceCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-       cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Joyce", image: UIImage(named: "Joyce")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
-        }
-        
-        return cell
-    }
-    
-    func johnathanCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Johnathan", image: UIImage(named: "Johnathan")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
-        }
-        
-        return cell
-    }
-    
-    func nancyCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
-            assertionFailure("Please make sure that the correct cell is registered in the table view.")
-            return nil
-        }
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Nancy", image: UIImage(named: "Nancy")!)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
-        }
-        
-        return cell
-    }
-    
-    func demigorgenCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
+    func darkCell(collectionView: UICollectionView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableCollectionViewCell? {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableCollectionViewCell else {
             assertionFailure("Please make sure that the correct cell is registered in the table view.")
             return nil
@@ -221,17 +105,33 @@ private extension CollectionViewCellCreator {
         let image: UIImage = {
             switch theme {
             case .light:
-                return UIImage(named: "Demigorgen Light")!
+                return #imageLiteral(resourceName: "green-bulb--off")
             case .dark:
-                return UIImage(named: "Demigorgen Dark")!
+                return #imageLiteral(resourceName: "green-bulb--lit")
             }
         }()
-        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, name: "Demigorgen", image: image)
-
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
+        cell.viewModel = ColorUpdatableCollectionViewCell.ViewModel(theme: theme, title: "Dark", image: image)
+        
+        cell.tapHandler = { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.delegate?.collectionViewCellCreatorDidSelectDarkMode(cellCreator: strongSelf)
         }
         
         return cell
     }
+}
+
+// MARK: CollectionViewCellActionDelegate
+
+protocol CollectionViewCellActionDelegate: class {
+    
+    /// A delegate method that is called when the cell of a character never having traveled to the Upside Down is tapped.
+    ///
+    /// - Parameter cellCreator: The cell creator that is notifying its delegate.
+    func collectionViewCellCreatorDidSelectLightMode(cellCreator: CollectionViewCellCreator)
+    
+    /// A delegate method that is called when the cell of a character having traveled to the Upside Down is tapped.
+    ///
+    /// - Parameter cellCreator: The cell creator that is notifying its delegate.
+    func collectionViewCellCreatorDidSelectDarkMode(cellCreator: CollectionViewCellCreator)
 }

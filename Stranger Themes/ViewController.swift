@@ -48,7 +48,7 @@ final class ViewController: UIViewController {
 private extension ViewController {
     
     func setUpNavigationTitle() {
-        navigationItem.title = "Intro"
+        navigationItem.title = "View Demo"
     }
     
     func setUpButtons() {
@@ -75,6 +75,7 @@ extension ViewController: ColorUpdatable {
         lightButton.configureColors(for: theme)
         darkButton.configureColors(for: theme)
         navigationController?.navigationBar.updateColors(for: theme)
+        tabBarController?.tabBar.updateColors(for: theme)
     }
 }
 

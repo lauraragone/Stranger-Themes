@@ -10,25 +10,6 @@ import UIKit
 
 extension UIColor {
     
-    // MARK: - Nested Types
-    
-    struct Palette {
-        static let white = UIColor.white
-        static let mulberryRed = UIColor(red: 197.0 / 255.0, green: 81.0 / 255.0, blue: 82.0 / 255.0, alpha: 1.0)
-        static let fireBushOrange = UIColor(red: 225.0 / 255.0, green: 148.0 / 255.0, blue: 51.0 / 255.0, alpha: 1.0)
-        static let canaryYellow = UIColor(red: 255.0 / 255.0, green: 252.0 / 255.0, blue: 120.0 / 255.0, alpha: 1.0)
-        static let saffronYellow = UIColor(red: 242.0 / 255.0, green: 190.0 / 255.0, blue: 46.0 / 255.0, alpha: 1.0)
-        static let wasabiGreen = UIColor(red: 102.0 / 255.0, green: 255.0 / 255.0, blue: 102.0 / 255.0, alpha: 1.0)
-        static let sushiGreen = UIColor(red: 118.0 / 255.0, green: 184.0 / 255.0, blue: 59.0 / 255.0, alpha: 1.0)
-        static let ceruleanBlue = UIColor(red: 0.0 / 255.0, green: 158.0 / 255.0, blue: 220.0 / 255.0, alpha: 1.0)
-        static let cannonPurple = UIColor(red: 147.0 / 255.0, green: 78.0 / 255.0, blue: 132.0 / 255.0, alpha: 1.0)
-        static let steelGray = UIColor(white: 121.0 / 255.0, alpha: 1.0)
-        static let scrollGray = UIColor(red: 111.0 / 255.0, green: 113.0 / 255.0, blue: 121.0 / 255.0, alpha: 1.0)
-        static let silver = UIColor(white: 204.0 / 255.0, alpha: 1.0)
-        static let groupedGray = UIColor(red: 239.0 / 255.0, green: 239.0 / 255.0, blue: 241.0 / 255.0, alpha: 1.0)
-        static let black = UIColor(white: 34.0 / 255.0, alpha: 1.0)
-    }
-    
     // MARK: - Brand
     
     /// Returns the palette color associated with the Stranger Theme's brand.
@@ -337,5 +318,74 @@ extension UIColor {
         case .dark:
             return Palette.groupedGray
         }
+    }
+}
+
+// MARK: - Nested Types
+
+private extension UIColor {
+    
+    struct Palette {
+        
+        static let white = UIColor.white
+        
+        static let mulberryRed = UIColor(red: 197.0 / 255.0,
+                                         green: 81.0 / 255.0,
+                                         blue: 82.0 / 255.0,
+                                         alpha: 1.0)
+        
+        static let fireBushOrange = UIColor(red: 225.0 / 255.0,
+                                            green: 148.0 / 255.0,
+                                            blue: 51.0 / 255.0,
+                                            alpha: 1.0)
+        
+        static let canaryYellow = UIColor(red: 255.0 / 255.0,
+                                          green: 252.0 / 255.0,
+                                          blue: 120.0 / 255.0,
+                                          alpha: 1.0)
+        
+        static let saffronYellow = UIColor(red: 242.0 / 255.0,
+                                           green: 190.0 / 255.0,
+                                           blue: 46.0 / 255.0,
+                                           alpha: 1.0)
+        
+        static let wasabiGreen = UIColor(red: 102.0 / 255.0,
+                                         green: 255.0 / 255.0,
+                                         blue: 102.0 / 255.0,
+                                         alpha: 1.0)
+        
+        static let sushiGreen = UIColor(red: 118.0 / 255.0,
+                                        green: 184.0 / 255.0,
+                                        blue: 59.0 / 255.0,
+                                        alpha: 1.0)
+        
+        static let ceruleanBlue = UIColor(red: 0.0 / 255.0,
+                                          green: 158.0 / 255.0,
+                                          blue: 220.0 / 255.0,
+                                          alpha: 1.0)
+        
+        static let cannonPurple = UIColor(red: 147.0 / 255.0,
+                                          green: 78.0 / 255.0,
+                                          blue: 132.0 / 255.0,
+                                          alpha: 1.0)
+        
+        static let steelGray = UIColor(white: 121.0 / 255.0,
+                                       alpha: 1.0)
+        
+        static let scrollGray = UIColor(red: 111.0 / 255.0,
+                                        green: 113.0 / 255.0,
+                                        blue: 121.0 / 255.0,
+                                        alpha: 1.0)
+        
+        static let silver = UIColor(white: 204.0 / 255.0,
+                                    alpha: 1.0)
+        
+        static let groupedGray = UIColor(red: 239.0 / 255.0,
+                                         green: 239.0 / 255.0,
+                                         blue: 241.0 / 255.0,
+                                         alpha: 1.0)
+        
+        static let black = UIColor(white: 34.0 / 255.0,
+                                   alpha: 1.0)
     }
 }

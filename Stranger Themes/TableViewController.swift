@@ -10,41 +10,16 @@ import UIKit
 
 /// A simple table view controller displaying a table header and several cells.
 final class TableViewController: UITableViewController {
-    
-    // MARK: - Nested Types
-    
-    /// The style of the table view's header.
-    ///
-    /// - hawkinsIndiana: Displays a small town in Indiana.
-    /// - upsideDown: Displays a mysterious realm of darkness.
-    enum HeaderStyle {
-        
-        case hawkinsIndiana
-        
-        case upsideDown
-    }
-    
+
     // MARK: - Properties
-    
-    /// The style of the table view's header.
-    fileprivate var headerStyle: HeaderStyle {
-        get {
-            switch theme {
-            case .light:
-                return .hawkinsIndiana
-            case .dark:
-                return .upsideDown
-            }
-        }
-    }
     
     /// The object responsible for defining the appearance of table view cells.
     fileprivate lazy var cellCreator: TableViewCellCreator = {
-        return TableViewCellCreator(tableView: self.tableView)
+        return TableViewCellCreator(tableView: self.tableView, tableViewCellActionDelegate: self)
     }()
     
     /// The data source responsbile for populating the table view.
-    var dataSource: TableViewDataSource?
+    fileprivate var dataSource: TableViewDataSource?
     
     // MARK: - ColorUpdatable
     
@@ -52,7 +27,6 @@ final class TableViewController: UITableViewController {
         didSet {
             guard oldValue != theme else { return }
             updateDataSource()
-            updateTableHeaderView()
         }
     }
 
@@ -70,7 +44,6 @@ final class TableViewController: UITableViewController {
 
         setUpNavigationTitle()
         setUpTableView()
-        updateTableHeaderView()
         updateDataSource()
         updateColors(for: theme)
     }
@@ -78,6 +51,9 @@ final class TableViewController: UITableViewController {
     // MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        defer {
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
         if let cell = tableView.cellForRow(at: indexPath) as? ColorUpdatableTableViewCell {
             cell.tapHandler?()
         }
@@ -93,19 +69,7 @@ private extension TableViewController {
     }
     
     func setUpNavigationTitle() {
-        navigationItem.title = "Worlds"
-    }
-    
-    func updateTableHeaderView() {
-        let image: UIImage? = {
-            switch headerStyle {
-            case .hawkinsIndiana:
-                return UIImage(named: "Hawkins")
-            case .upsideDown:
-                return UIImage(named: "Upside Down")
-            }
-        }()
-       tableView.tableHeaderView = UIImageView(image: image)
+        navigationItem.title = "Table View Demo"
     }
     
     func setUpTableView() {
@@ -130,5 +94,20 @@ extension TableViewController: ColorUpdatable {
     func updateColors(for theme: Theme) {
         view.backgroundColor = .contentBackground(for: theme)
         navigationController?.navigationBar.updateColors(for: theme)
+        tabBarController?.tabBar.updateColors(for: theme)
     }
 }
+
+// MARK: TableViewCellActionDelegate
+
+extension TableViewController: TableViewCellActionDelegate {
+    
+    func tableViewCellCreatorDidSelectLightMode(cellCreator: TableViewCellCreator) {
+        CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
+    }
+    
+    func tableViewCellCreatorDidSelectDarkMode(cellCreator: TableViewCellCreator) {
+        CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
+    }
+}
+

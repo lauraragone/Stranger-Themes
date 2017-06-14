@@ -11,8 +11,6 @@
 /// - light: A bright theme using primarily light colors.
 /// - dark: A dim theme using primarily dark colors.
 enum Theme {
-    
     case light
-    
     case dark
 }

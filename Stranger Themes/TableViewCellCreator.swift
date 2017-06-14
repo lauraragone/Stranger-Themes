@@ -13,19 +13,17 @@ final class TableViewCellCreator {
     
     // MARK: - Properties
     
-    /// A struct defining cell reuse identifying strings.
-    fileprivate struct ReuseIdentifier {
-        
-        /// The reuse identifier corresponding to a color updatable cell.
-        static let colorUpdatableCell = "colorUpdatableCellReuseIdentifier"
-    }
+    fileprivate weak var delegate: TableViewCellActionDelegate?
     
     // MARK: - Initializers
     
     /// Sets up the initial cell configuration necessary on the table view. Registers the appropriate cell types.
     ///
-    /// - Parameter tableView: The table view upon which to register the cell types.
-    init(tableView: UITableView) {
+    /// - Parameters:
+    ///   - tableView: The table view upon which to register the cell types.
+    ///   - tableViewCellActionDelegate: An optional delegate to handle taps to cells created by this cell creator.
+    init(tableView: UITableView, tableViewCellActionDelegate: TableViewCellActionDelegate?) {
+        self.delegate = tableViewCellActionDelegate
         registerCellTypes(for: tableView)
     }
 }
@@ -45,14 +43,26 @@ extension TableViewCellCreator {
         return {
             switch (indexPath.section, indexPath.row) {
             case (0, 0):
-                return hawkinsCell(tableView: tableView, indexPath: indexPath, theme: theme)
+                return lightCell(tableView: tableView, indexPath: indexPath, theme: theme)
             case (0, 1):
-                return upsideDownCell(tableView: tableView, indexPath: indexPath, theme: theme)
+                return darkCell(tableView: tableView, indexPath: indexPath, theme: theme)
             default:
                 assertionFailure("Please configure the data source to support the display cells at this index path.")
                 return nil
             }
         }() ?? UITableViewCell()
+    }
+}
+
+// MARK: - Nested Types
+
+private extension TableViewCellCreator {
+    
+    /// A struct defining cell reuse identifying strings.
+    struct ReuseIdentifier {
+        
+        /// The reuse identifier corresponding to a color updatable cell.
+        static let colorUpdatableCell = "colorUpdatableCellReuseIdentifier"
     }
 }
 
@@ -64,28 +74,51 @@ private extension TableViewCellCreator {
         tableView.register(ColorUpdatableTableViewCell.self, forCellReuseIdentifier: ReuseIdentifier.colorUpdatableCell)
     }
     
-    func hawkinsCell(tableView: UITableView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableTableViewCell? {
+    func lightCell(tableView: UITableView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableTableViewCell? {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableTableViewCell else {
             assertionFailure("Please make sure that the correct cell is registered in the table view.")
             return nil
         }
-         cell.viewModel = ColorUpdatableTableViewCell.ViewModel(theme: theme, title: "Hawkins, Indiana", subtitle: "A small town with a terrible secret.")
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
+        cell.viewModel = ColorUpdatableTableViewCell.ViewModel(theme: theme, title: "Light", subtitle: "Tap this cell to activate the light theme")
+        cell.selectionStyle = .default
+        
+        cell.tapHandler = { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.delegate?.tableViewCellCreatorDidSelectLightMode(cellCreator: strongSelf)
         }
         
         return cell
     }
     
-    func upsideDownCell(tableView: UITableView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableTableViewCell? {
+    func darkCell(tableView: UITableView, indexPath: IndexPath, theme: Theme) -> ColorUpdatableTableViewCell? {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.colorUpdatableCell, for: indexPath) as? ColorUpdatableTableViewCell else {
             assertionFailure("Please make sure that the correct cell is registered in the table view.")
             return nil
         }
-        cell.viewModel = ColorUpdatableTableViewCell.ViewModel(theme: theme, title: "The Upside Down", subtitle: "A mysterious realm bathed in darkness.")
-        cell.tapHandler = {
-            CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
+        cell.viewModel = ColorUpdatableTableViewCell.ViewModel(theme: theme, title: "Dark", subtitle: "Tap this cell to activate the dark theme")
+        cell.selectionStyle = .default
+        
+        cell.tapHandler = { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.delegate?.tableViewCellCreatorDidSelectDarkMode(cellCreator: strongSelf)
         }
+        
         return cell
     }
 }
+
+// MARK: TableViewCellActionDelegate
+
+protocol TableViewCellActionDelegate: class {
+    
+    /// A delegate method that is called when the cell of a character never having traveled to the Upside Down is tapped.
+    ///
+    /// - Parameter cellCreator: The cell creator that is notifying its delegate.
+    func tableViewCellCreatorDidSelectLightMode(cellCreator: TableViewCellCreator)
+    
+    /// A delegate method that is called when the cell of a character having traveled to the Upside Down is tapped.
+    ///
+    /// - Parameter cellCreator: The cell creator that is notifying its delegate.
+    func tableViewCellCreatorDidSelectDarkMode(cellCreator: TableViewCellCreator)
+}
+

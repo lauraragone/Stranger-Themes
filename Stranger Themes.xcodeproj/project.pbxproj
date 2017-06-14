@@ -27,6 +27,7 @@
 		30D697551E4E892800346C89 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D697541E4E892800346C89 /* TableViewDataSource.swift */; };
 		30D697571E4E8AB300346C89 /* ColorUpdatableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D697561E4E8AB300346C89 /* ColorUpdatableTableViewCell.swift */; };
 		30D697591E50D40B00346C89 /* TableViewCellCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D697581E50D40B00346C89 /* TableViewCellCreator.swift */; };
+		30DB86D71EF0C613009A5783 /* UITabBar+ColorUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DB86D61EF0C613009A5783 /* UITabBar+ColorUpdatable.swift */; };
 		F8510FC51E669CFE001561A2 /* ColorUpdatableCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8510FC41E669CFE001561A2 /* ColorUpdatableCollectionViewCell.xib */; };
 		F86F42141E66AE7F00E9710D /* UINavigationBar+ColorUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86F42131E66AE7F00E9710D /* UINavigationBar+ColorUpdatable.swift */; };
 /* End PBXBuildFile section */
@@ -75,6 +76,7 @@
 		30D697541E4E892800346C89 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		30D697561E4E8AB300346C89 /* ColorUpdatableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUpdatableTableViewCell.swift; sourceTree = "<group>"; };
 		30D697581E50D40B00346C89 /* TableViewCellCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellCreator.swift; sourceTree = "<group>"; };
+		30DB86D61EF0C613009A5783 /* UITabBar+ColorUpdatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITabBar+ColorUpdatable.swift"; sourceTree = "<group>"; };
 		F8510FC41E669CFE001561A2 /* ColorUpdatableCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorUpdatableCollectionViewCell.xib; sourceTree = "<group>"; };
 		F86F42131E66AE7F00E9710D /* UINavigationBar+ColorUpdatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+ColorUpdatable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -131,9 +133,9 @@
 				30A8B6021E66420400D4C8C9 /* Extensions */,
 				30A8B6041E66533300D4C8C9 /* Notifications */,
 				30A8B6031E6652F700D4C8C9 /* Color Updating */,
-				30A8B6001E6640F300D4C8C9 /* Intro */,
-				30A8B5FF1E6640E100D4C8C9 /* Worlds */,
-				30A8B6011E6641C700D4C8C9 /* Characters */,
+				30A8B6001E6640F300D4C8C9 /* View */,
+				30A8B5FF1E6640E100D4C8C9 /* Table View */,
+				30A8B6011E6641C700D4C8C9 /* Collection View */,
 				30A167981E4E19FE00E049AE /* Main.storyboard */,
 				30A1679B1E4E19FE00E049AE /* Assets.xcassets */,
 				30A1679D1E4E19FE00E049AE /* LaunchScreen.storyboard */,
@@ -160,7 +162,7 @@
 			path = "Stranger ThemesUITests";
 			sourceTree = "<group>";
 		};
-		30A8B5FF1E6640E100D4C8C9 /* Worlds */ = {
+		30A8B5FF1E6640E100D4C8C9 /* Table View */ = {
 			isa = PBXGroup;
 			children = (
 				30D697521E4E887400346C89 /* TableViewController.swift */,
@@ -168,18 +170,18 @@
 				30D697581E50D40B00346C89 /* TableViewCellCreator.swift */,
 				30D697561E4E8AB300346C89 /* ColorUpdatableTableViewCell.swift */,
 			);
-			name = Worlds;
+			name = "Table View";
 			sourceTree = "<group>";
 		};
-		30A8B6001E6640F300D4C8C9 /* Intro */ = {
+		30A8B6001E6640F300D4C8C9 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				30A167961E4E19FE00E049AE /* ViewController.swift */,
 			);
-			name = Intro;
+			name = View;
 			sourceTree = "<group>";
 		};
-		30A8B6011E6641C700D4C8C9 /* Characters */ = {
+		30A8B6011E6641C700D4C8C9 /* Collection View */ = {
 			isa = PBXGroup;
 			children = (
 				30A8B6051E6687FF00D4C8C9 /* CollectionViewController.swift */,
@@ -188,7 +190,7 @@
 				30A8B60B1E668E4300D4C8C9 /* ColorUpdatableCollectionViewCell.swift */,
 				F8510FC41E669CFE001561A2 /* ColorUpdatableCollectionViewCell.xib */,
 			);
-			name = Characters;
+			name = "Collection View";
 			sourceTree = "<group>";
 		};
 		30A8B6021E66420400D4C8C9 /* Extensions */ = {
@@ -196,6 +198,7 @@
 			children = (
 				30D6974D1E4E62EC00346C89 /* UIColor Extensions */,
 				F86F42151E66AF2A00E9710D /* UINavigationBar Extensions */,
+				30DB86D81EF0C617009A5783 /* UITabBar Extensions */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -224,6 +227,14 @@
 				30A167C21E4E1CA500E049AE /* UIColor+Palette.swift */,
 			);
 			name = "UIColor Extensions";
+			sourceTree = "<group>";
+		};
+		30DB86D81EF0C617009A5783 /* UITabBar Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				30DB86D61EF0C613009A5783 /* UITabBar+ColorUpdatable.swift */,
+			);
+			name = "UITabBar Extensions";
 			sourceTree = "<group>";
 		};
 		F86F42151E66AF2A00E9710D /* UINavigationBar Extensions */ = {
@@ -380,6 +391,7 @@
 				F86F42141E66AE7F00E9710D /* UINavigationBar+ColorUpdatable.swift in Sources */,
 				30A167C51E4E1D6000E049AE /* ColorThemeObserving.swift in Sources */,
 				30A8B6081E6688D700D4C8C9 /* CollectionViewCellCreator.swift in Sources */,
+				30DB86D71EF0C613009A5783 /* UITabBar+ColorUpdatable.swift in Sources */,
 				30D697551E4E892800346C89 /* TableViewDataSource.swift in Sources */,
 				30A8B60C1E668E4300D4C8C9 /* ColorUpdatableCollectionViewCell.swift in Sources */,
 				30A8B60A1E6688E900D4C8C9 /* CollectionViewDataSource.swift in Sources */,

@@ -15,11 +15,11 @@ final class CollectionViewController: UICollectionViewController {
     
     /// The object responsible for defining the appearance of collection view cells.
     fileprivate lazy var cellCreator: CollectionViewCellCreator = {
-        return CollectionViewCellCreator(collectionView: self.collectionView!)
+        return CollectionViewCellCreator(collectionView: self.collectionView, collectionViewCellActionDelegate: self)
     }()
     
     /// The data source responsbile for populating the collection view.
-    var dataSource: CollectionViewDataSource?
+    fileprivate var dataSource: CollectionViewDataSource?
     
     // MARK: - ColorUpdatable
     
@@ -34,6 +34,7 @@ final class CollectionViewController: UICollectionViewController {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
         commonInitialization()
     }
     
@@ -51,6 +52,9 @@ final class CollectionViewController: UICollectionViewController {
     // MARK: - UICollectionViewDelegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        defer {
+            collectionView.deselectItem(at: indexPath, animated: false)
+        }
         if let cell = collectionView.cellForItem(at: indexPath) as? ColorUpdatableCollectionViewCell {
             cell.tapHandler?()
         }
@@ -66,7 +70,7 @@ private extension CollectionViewController {
     }
     
     func setUpNavigationTitle() {
-        navigationItem.title = "Characters"
+        navigationItem.title = "Collection View Demo"
     }
     
     func setUpCollectionView() {
@@ -91,5 +95,19 @@ extension CollectionViewController: ColorUpdatable {
         view.backgroundColor = .contentBackground(for: theme)
         collectionViewLayout.collectionView?.backgroundColor = .contentBackground(for: theme)
         navigationController?.navigationBar.updateColors(for: theme)
+        tabBarController?.tabBar.updateColors(for: theme)
+    }
+}
+
+// MARK: CollectionViewCellActionDelegate
+
+extension CollectionViewController: CollectionViewCellActionDelegate {
+    
+    func collectionViewCellCreatorDidSelectLightMode(cellCreator: CollectionViewCellCreator) {
+        CustomNotification.didChangeColorTheme.post(userInfo: Theme.light)
+    }
+    
+    func collectionViewCellCreatorDidSelectDarkMode(cellCreator: CollectionViewCellCreator) {
+        CustomNotification.didChangeColorTheme.post(userInfo: Theme.dark)
     }
 }
